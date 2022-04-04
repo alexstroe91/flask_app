@@ -1,45 +1,13 @@
 
-from flask import Flask, render_template, request, Markup, url_for
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager, UserMixin, current_user, login_user
-from werkzeug.security import generate_password_hash, check_password_hash
-import uuid
+from flask import Flask, render_template, request
+from models import *
+from config import *
+from werkzeug.security import check_password_hash
+
 
 app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Niup123$%&@localhost:5432/flask"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = "TRUE"
-
-
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
-
-class UserModel(db.Model, UserMixin):
-    __tablename__ = 'Usuarios'
-
-    id = db.Column(db.String(), primary_key=True)
-    email = db.Column(db.String(), nullable = False, unique = True)
-    name = db.Column(db.String(), nullable = False, unique = True)
-    password = db.Column(db.String(), nullable = False)
-
-    def __init__(self, name, email, password):
-        self.id = uuid.uuid4()
-        self.name = name
-        self.email = email
-        self.password = generate_password_hash(password)
-    
-    def set_password(self, password):
-        self.password = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
-
-    def __repr__(self):
-        return f"<Nombre: {self.name} - Email: {self.email}>"
-
-
+setup(app)
+db.init_app(app)
 
 @app.route('/')
 def index():
@@ -58,12 +26,6 @@ def login():
             return render_template('login.html', msg = "Revise sus credenciales.") 
     
     return render_template('login.html')
-
-
-
-
-
-
 
 
 @app.route('/signup', methods = ['GET', 'POST'])

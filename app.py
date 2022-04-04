@@ -1,33 +1,43 @@
-from flask import Flask, redirect, render_template, request, Markup
+
+from flask import Flask, render_template, request, Markup, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import LoginManager, UserMixin, current_user, login_user
+from werkzeug.security import generate_password_hash, check_password_hash
+import uuid
 
 app = Flask(__name__)
 
-app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Niup123$%&@localhost:5432/flask"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = "TRUE"
+
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
-class CarsModel(db.Model):
-    __tablename__ = 'carsPrueba'
+class UserModel(db.Model, UserMixin):
+    __tablename__ = 'Usuarios'
 
-    matricula = db.Column(db.String, primary_key=True)
-    name = db.Column(db.String(), nullable = False)
-    model = db.Column(db.String(), nullable = False)
-    doors = db.Column(db.Integer(), nullable = False)
+    id = db.Column(db.String(), primary_key=True)
+    email = db.Column(db.String(), nullable = False, unique = True)
+    name = db.Column(db.String(), nullable = False, unique = True)
+    password = db.Column(db.String(), nullable = False)
 
-    def __init__(self, matricula, name, model, doors):
-        self.matricula = matricula
+    def __init__(self, name, email, password):
+        self.id = uuid.uuid4()
         self.name = name
-        self.model = model
-        self.doors = doors
+        self.email = email
+        self.password = generate_password_hash(password)
+    
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
     def __repr__(self):
-        return f"<Matricula: {self.matricula} - Marca: {self.name} - Modelo: {self.model} - Puertas: {self.doors}>"
+        return f"<Nombre: {self.name} - Email: {self.email}>"
 
 
 
@@ -36,59 +46,55 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/cars', methods=['POST', 'GET'])
-def handle_cars():
-    error = ""
-    message = ""
-    try:
-        if request.method == 'POST':
-        
-                new_car = CarsModel(
-                    matricula=request.form['matricula'].upper(),
-                    name=request.form['name'].upper(), 
-                    model=request.form['model'].upper(), 
-                    doors=int(request.form['doors']))
-
-                db.session.add(new_car)
-                db.session.commit()
-
-                message = f"{new_car.name} añadido"
-                return redirect('/cars')
-        if request.method == 'GET':
-            cars = CarsModel.query.all()
-            coches = ""
-            for car in cars:
-                coches += "|" + str(car) + "|" + Markup("<br>")
-
-
-    except Exception as ex:
-            error = "No se pudo añadir el coche. Revise todos los campos"
-            return render_template('pruebaPostCoche.html', error = error, message = message, results = coches)
-
-    return render_template('pruebaPostCoche.html', error = error, message = message, results = coches)
-
-
-
-
-
-
-@app.route('/cars/<car_id>', methods = ['GET', 'PUT', 'DELETE'])
-def handle_car(car_matricula):
-    car = CarsModel.query.get_or_404(car_matricula)
-
-    if request.method == 'GET':
-        response = {
-            "matricula": car.matricula,
-            "name": car.name,
-            "model": car.model,
-            "doors": car.doors
-        }
-        return {"message": "success", "car": response}
+@app.route('/login', methods = ['POST', 'GET'])
+def login():
+    email = request.form.get('email')
+    password = request.form.get('password')
+    user = UserModel.query.filter_by(email = email).first()
+    if request.method == 'POST':
+        if user and check_password_hash(user.password, password):
+            return render_template('index.html')
+        else:
+            return render_template('login.html', msg = "Revise sus credenciales.") 
     
-    elif request.method == 'DELETE':
-        db.session.delete(car)
-        db.session.commit()
-        return {"message": f"Car {car.matricula} successfully deleted"}
+    return render_template('login.html')
+
+
+
+
+
+
+
+
+@app.route('/signup', methods = ['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirmpassword = request.form.get('confirmpassword')
+
+        emailRegistered = UserModel.query.filter_by(email = email).first()
+        nameInUse = UserModel.query.filter_by(name = username).first()
+
+        if password != confirmpassword:
+            return render_template('signup.html', msg = "Las contraseñas no coinciden")
+        elif emailRegistered:
+            return render_template('signup.html', msg = "Email ya registrado")
+        elif nameInUse:
+            return render_template('signup.html', msg = "Nombre en uso")
+            
+        else:
+            new_user = UserModel(name = username, email = email, password = password)
+            db.session.add(new_user)
+            db.session.commit()
+            return render_template('signup.html', msg = "Usuario creado")
+
+    return render_template('signup.html')
+
+
 
 if __name__ == "__main__":
     app.run(debug = True)
+
+    

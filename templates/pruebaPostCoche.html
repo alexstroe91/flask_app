@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>Prueba de la primera página de coche</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    {% extends 'base.html' %}
+    {% block content %}
+    <div class="container">
+      <h1>Introduzca los datos del coche a añadir</h1>
+      <br>
+        <hr>
+
+      <form action="" method="post">
+          <p>
+                Matrícula:
+                <input type="text" placeholder="0000AAA" name="matricula" pattern="[0-9]{4}[A-Za-z]{3}" required>
+            </p>
+            <p>
+                Marca:&nbsp&nbsp&nbsp&nbsp&nbsp
+                <input type="text" placeholder="Audi" name="name" required>
+            </p>
+            <p>
+                Modelo:&nbsp&nbsp&nbsp
+                <input type="text" placeholder="R8" name="model" required>
+            </p>
+            <p>
+                Puertas:&nbsp&nbsp&nbsp
+            <input type ="number" placeholder="4" name = "doors" value = "4"  required>
+            </p>
+
+    <div>
+        <input class="btn btn-dark" type="submit" value="Añadir">        
+    </div>  
+    </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+      {% if message %}
+            <p class = "error"><strong>Message: </strong> {{ message }}
+      {% endif %}
+    </div>
+    <hr>
+    <div class = "text-center bg-dark text-white w-50 mx-auto">
+      <p>{{results}}
+    </div>
+    {% endblock %}
+  </body>
+</html>

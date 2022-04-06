@@ -24,10 +24,17 @@
             </ul>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+      <div class="d-flex">
+
+          {% if current_user.is_anonymous %}
+            <li class = "nav-item"><a class = "text-white" href="{{ url_for('login') }}">Login</a></li>
+            <li class = "nav-item"><a class = "link-light" href="{{ url_for('signup') }}">Registrar</a></li>
+        {% else %}
+            <li class = "text-white nav-item">{{ current_user.name }}</li>
+            <li class = "nav-item"><a class = "link-light" href="{{ url_for('logout') }}">Logout</a></li>
+        {% endif %}
+
+      </div>
       </div>
     </div>
   </nav>

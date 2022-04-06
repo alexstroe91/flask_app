@@ -1,0 +1,36 @@
+<html lang='es'>
+  <head>
+    <meta charset='utf-8' />
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js'></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          events:[
+              {% for event in events %}
+              {
+                  title : '{{event.todo}}',
+                  start : '{{event.date}}',
+              },
+              {% endfor %}
+          ]
+        });
+        calendar.setOption('locale', 'ISO');       
+        calendar.render();
+      });
+
+
+    </script>
+    
+  </head>
+  {%include 'imports.html'%}
+  {% block content %}
+  <body>
+      <div class="container ">
+          <div id='calendar' class = "mx-auto"></div>
+      </div>
+  </body>
+  {%endblock%}
+</html>

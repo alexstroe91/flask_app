@@ -1,25 +1,46 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Indice</title>
-</head>
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <head>
+    <title>Indice</title>
+  </head>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')
+    }}">
 
-<body>
+  <body>
     {% extends 'base.html' %}
     {% block content %}
-    
-    <div class = "container pt-5">
-      <div class = "row border border-dark">
-        <div class = "col border border-dark text-center">
-          <h1><a href="http://127.0.0.1:5000/login" class="text-dark-50 fw-bold">Login</a></h1>
+
+    <div class="container pt-5">
+      <div class="row border border-dark">
+        <div class="col border border-dark text-center">
+          <h1><a href="http://127.0.0.1:5000/login" class="text-dark-50
+              fw-bold">Login</a></h1>
         </div>
-        <div class = "col border border-dark text-center">
-          <h1><a href="http://127.0.0.1:5000/signup" class="text-dark-50 fw-bold">Signup</a></h1>
+        <div class="col border border-dark text-center">
+          <h1><a href="http://127.0.0.1:5000/signup" class="text-dark-50
+              fw-bold">Signup</a></h1>
+        </div>
+        <div class="col border border-dark text-center">
+          <h1><a href="http://127.0.0.1:5000/saludo" class="text-dark-50
+              fw-bold">Login required</a></h1>
+        </div>
+      </div>
+      <div class="row border border-dark">
+        <div class="col border border-dark text-center">
+          <h1><a href="http://127.0.0.1:5000" class="text-dark-50
+              fw-bold">Chat</a></h1>
+        </div>
+        <div class="col border border-dark text-center">
+          <h1><a href="http://127.0.0.1:5000/calendario" class="text-dark-50
+              fw-bold">Calendario</a></h1>
+        </div>
+        <div class="col border border-dark text-center">
+          <h1><a href="http://127.0.0.1:5000" class="text-dark-50
+              fw-bold">Hueco 2</a></h1>
         </div>
       </div>
     </div>
 
     {% endblock %}
-</body>
+  </body>
 </html>

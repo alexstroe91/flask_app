@@ -1,15 +1,22 @@
 from flask import Flask, flash, redirect, render_template, request, url_for
-from flask_login import LoginManager, current_user, login_user, logout_user
+from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
 
-
 app = Flask(__name__)
 setup(app)
-
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
+login_manager.login_message = "Necesitas iniciar sesión para ver esta página"
+
+events = [
+    {
+        'todo' : 'Todo1',
+        'date' : '2022-04-06'
+    }
+]
+
 
 db.init_app(app)
 
@@ -18,6 +25,7 @@ def index():
     #ELIMINAR O EDITAR A POSTERIORI, AHORA CON ACCESO A PÁGINAS PARA TESTEO
     return render_template('index.html')
 
+#Login
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
     if current_user.is_authenticated:
@@ -33,7 +41,7 @@ def login():
     if request.method == 'POST':
         if user and check_password_hash(user.password, password):
             login_user(user, remember = request.form.get('remember'))
-            return render_template('index.html')
+            return redirect(url_for('saludo'))
         elif not user:
             flash("Usuario no encontrado")
         elif not check_password_hash(user.password, password):
@@ -80,20 +88,23 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route('/saludo')
+@login_required
+def saludo():
+    return render_template('pruebaLoginRequired.html')
+
+@app.route('/calendario')
+def calendario():
+    return render_template('calendario.html', events = events)
 
 
-
-
-if __name__ == "__main__":
-    app.run(debug = True)
-
-
-
-
-
+#Extra
 @login_manager.user_loader
 def load_user(user_id):
     user = UserModel.query.filter_by(id = user_id).first()
     if user:
         return user
     return None  
+
+if __name__ == "__main__":
+    app.run()

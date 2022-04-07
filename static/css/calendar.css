@@ -2,17 +2,33 @@
 body{
   margin: 0;
 	padding: 100;
-  background-color: #000;
-  color:rgb(255, 255, 255);
+  background-color: #1d2f43;
+  color:#010b13;
 }
+
+.fc td, .fc th{
+  border-width: 0.2em;
+  border-color: #100c08;
+}
+
+
+
+.fc-daygrid-day{
+  background-color: #e3dac9;
+}
+
+.fc-view-container {
+  border: 0.2em solid #009f6b;
+}
+
 
 .block {
   padding: 2%;
 	position: relative;
-  margin: auto;
+
   width: 100%;
 	height: 100%;
-	background: black;
+	background: #edc9af;
 }
 
 .block:before, .block:after {
@@ -20,13 +36,13 @@ body{
 	position: absolute;
 	left: -2px;
 	top: -2px;
-	background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094, 
-		#0000ff, #00ff00,#ffff00, #ff0000);
-	background-size: 400%;
-	width: calc(100% + 4px);
-	height: calc(100% + 4px);
-	z-index: -1;
-	animation: steam 20s linear infinite;
+	background: linear-gradient(45deg,#FFD700, #ff0000);
+	width: 100%;
+  height: 100%;
+  transform: scale(1.01);
+  z-index: -1;
+  background-size: 300%;
+	animation: steam 15s linear infinite;
 }
 
 @keyframes steam {
@@ -34,13 +50,9 @@ body{
 		background-position: 0 0;
 	}
 	50% {
-		background-position: 400% 0;
+		background-position: 300% 0;
 	}
 	100% {
 		background-position: 0 0;
 	}
-}
-
-.block:after {
-	filter: blur(50px);
 }

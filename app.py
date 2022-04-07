@@ -13,7 +13,11 @@ login_manager.login_message = "Necesitas iniciar sesión para ver esta página"
 events = [
     {
         'todo' : 'Todo1',
-        'date' : '2022-04-06'
+        'date' : '2022-04-06',
+    },
+    {
+        'todo' : 'Todo2',
+        'date' : '2022-05-06'
     }
 ]
 
@@ -95,7 +99,7 @@ def saludo():
 
 @app.route('/calendario')
 def calendario():
-    return render_template('calendario.html', events = events)
+    return render_template('calendario.html')
 
 
 #Extra

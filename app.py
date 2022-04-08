@@ -97,9 +97,23 @@ def logout():
 def saludo():
     return render_template('pruebaLoginRequired.html')
 
-@app.route('/calendario')
+
+@app.route('/modal')
+def modal():
+    
+    return render_template('modal.html')
+
+@app.route('/calendario', methods = ['GET', 'POST'])
 def calendario():
+    if request.method == 'POST':
+        fecha = request.form.get('fecha')
+        return render_template('index.html')
     return render_template('calendario.html')
+
+
+
+
+
 
 
 #Extra

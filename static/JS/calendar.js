@@ -1,22 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
 
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        editable: true,
         initialView: 'dayGridMonth',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
         },
         dateClick: function (info) {
+            $('#myModal').modal('show');
             var event = createEvent(info.dateStr, 'Some event', undefined);
             if (new Date(event.start) < new Date()) {
                 alert("La fecha ya pasó")
             } else {
                 calendar.addEvent(event);
             }
+
+
+            
+
         },
+
         eventClick: function (info) {
             evento = calendar.getEventById(info.event.id);
             evento.remove();

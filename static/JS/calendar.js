@@ -11,12 +11,23 @@ document.addEventListener('DOMContentLoaded', function () {
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
         },
         dateClick: function (info) {
-            $('#myModal').modal('show');
-            var event = createEvent(info.dateStr, 'Some event', undefined);
-            if (new Date(event.start) < new Date()) {
+            if (info.date < new Date()) {
                 alert("La fecha ya pasó")
             } else {
-                calendar.addEvent(event);
+                $('#myModal').modal('show');
+                
+                // $('#myModal').on('hidden.bs.modal', function(){
+                //     var titulo = $('#myModal-title').val();
+                //     var endDate = $('#myModal').data('endDate');
+                //     var startTime = $('#myModal').data('startTime');
+                //     var endTime = $('#myModal').data('endTime');
+                //     alert(titulo)
+                //     evento = createEvent(titulo,endDate, startTime,endTime, info.date)
+
+                //     calendar.addEvent(evento);
+                // });
+                
+
             }
 
 
@@ -36,12 +47,16 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-function createEvent(startDate, title, endDate) {
+document.getElementById("endDate").setAttribute("min", new Date()); 
+
+function createEvent(title,endDate,startTime,endTime, date) {
     const event = {
         id: CreateUUID(), // You must use a custom id generator
         title: title,
-        start: startDate,
-        allDay: endDate ? endDate : true // If there's no end date, the event will be all day of start date
+        start: date,
+        end: endDate,
+        startTime: startTime,
+        endTime: endTime
     }
     return event;
 }

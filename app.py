@@ -1,8 +1,11 @@
+from turtle import title
 from flask import Flask, flash, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
+from sqlalchemy import true
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
+import sys
 
 app = Flask(__name__)
 setup(app)
@@ -105,9 +108,8 @@ def modal():
 
 @app.route('/calendario', methods = ['GET', 'POST'])
 def calendario():
-    if request.method == 'POST':
-        fecha = request.form.get('fecha')
-        return render_template('index.html')
+    # if request.method == 'POST':
+    #     return render_template('index.html')
     return render_template('calendario.html')
 
 
@@ -125,4 +127,4 @@ def load_user(user_id):
     return None  
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug = true)

@@ -10,19 +10,38 @@ document.addEventListener('DOMContentLoaded', function () {
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
         dateClick: function (info) {
-            
+            var event = createEvent(info.dateStr, 'Some event', undefined);
+            if (new Date(event.start) < new Date()) {
+                alert("La fecha ya pasó")
+            } else {
+                calendar.addEvent(event);
+            }
         },
+        eventClick: function (info) {
+            evento = calendar.getEventById(info.event.id);
+            evento.remove();
+        }
 
-        events: [
-            // {% for event in events %}
-            {
-                title: '{{event.todo}}',
-                start: '{{event.date}}',
-            },
-            // {% endfor %}
-        ]
     }
     );
     calendar.setOption('locale', 'ISO');
     calendar.render();
 });
+
+
+function createEvent(startDate, title, endDate) {
+    const event = {
+        id: CreateUUID(), // You must use a custom id generator
+        title: title,
+        start: startDate,
+        allDay: endDate ? endDate : true // If there's no end date, the event will be all day of start date
+    }
+    return event;
+}
+
+function CreateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}

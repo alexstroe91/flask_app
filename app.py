@@ -1,6 +1,6 @@
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
-from sqlalchemy import true
+from sqlalchemy import null, true
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
@@ -14,21 +14,6 @@ db.init_app(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 login_manager.login_message = "Necesitas iniciar sesión para ver esta página"
-
-eventos = [
-        {
-            "id": "asdasd",
-            "title": "Title1",
-            "start": str(datetime.today().strftime('%Y-%m-%d')) + "00:00",
-            "end": "2022-04-20 15:30"
-        },
-         {
-            "id": "asdasd123",
-            "title": "Title2",
-            "start": datetime.today().strftime('%Y-%m-%d'),
-            "end": "2022-04-18 12:30"
-        }
-    ]
 
 db.init_app(app)
 
@@ -114,30 +99,35 @@ def modal():
 @app.route('/calendario', methods = ['GET', 'POST'])
 @login_required
 def calendario():
+    
     if request.method == 'POST':
         app.logger.debug("Title: " + str(request.form.get('title')))
         app.logger.debug("StartDate: " + str(request.form.get('startDate')))
         app.logger.debug("EndDate: " + str(request.form.get('endDate')))
         app.logger.debug("StartTime: " + str(request.form.get('startTime')))
         app.logger.debug("EndTime: " + str(request.form.get('endTime')))
+        app.logger.debug("Boton: " + str(request.form.get('btn')))
 
-        title = request.form.get('title')
-        start = str(request.form.get('startDate')) + " " + str(request.form.get('startTime'))
-        end = str(request.form.get('endDate')) + " " + str(request.form.get('endTime'))
-
-        new_event = EventModel(title = title, start = start, end = end)
-        db.session.add(new_event)
-        db.session.commit()
-        return render_template('index.html')
+        if request.form.get('btn') == "add":
+            title = request.form.get('title')
+            start = str(request.form.get('startDate')) + " " + str(request.form.get('startTime'))
+            end = str(request.form.get('endDate')) + " " + str(request.form.get('endTime'))
+            new_event = EventModel(title=title, start=start, end=end)
+            db.session.add(new_event)
+            db.session.commit()
+        return render_template('calendario.html')
 
 
 
 
     app.logger.debug("Prueba flask log")
-    return render_template('calendario.html', today = datetime.today().strftime('%Y-%m-%d'))
+    return render_template('calendario.html')
 
 
-
+@app.route('/eventos')
+@login_required
+def eventos():
+    return event_loader(current_user.name)
 
 
 
@@ -150,5 +140,20 @@ def load_user(user_id):
         return user
     return None  
 
+def event_loader(user_name):
+    eventos = []
+    events = db.session.query(EventModel).filter(EventModel.id.match(user_name)).all()
+    for evento in events:
+        eventos.append(
+            {
+                "id": evento.id,
+                "title": evento.title,
+                "start": evento.start.isoformat(),
+                "end": evento.end.isoformat()
+            }
+            )
+        
+    return jsonify(eventos)
+    
 if __name__ == "__main__":
     app.run(debug = true)

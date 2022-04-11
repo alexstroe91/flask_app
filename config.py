@@ -1,4 +1,5 @@
-from flask_login import LoginManager
+from flask_migrate import Migrate
+import sqlalchemy
 
 
 def setup(app):

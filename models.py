@@ -1,12 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 
 db = SQLAlchemy()
-migrate = Migrate(db)
 
 
 class UserModel(db.Model, UserMixin):
@@ -31,3 +28,22 @@ class UserModel(db.Model, UserMixin):
 
     def __repr__(self):
         return f"<Nombre: {self.name} - Email: {self.email}>"
+
+
+
+class EventModel(db.Model):
+    __tablename__ = 'Eventos'
+
+    id = db.Column(db.String(), primary_key=True)
+    title = db.Column(db.String(), nullable = False)
+    start = db.Column(db.DateTime(), nullable = False)
+    end = db.Column(db.DateTime(), nullable = False)
+
+    def __init__(self, title, start, end):
+        self.id = current_user.name + "%" + str(uuid.uuid4())
+        self.title = title
+        self.start = start
+        self.end = end
+
+    def __repr__(self):
+        return f"<Título: {self.title}>"

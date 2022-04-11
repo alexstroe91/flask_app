@@ -1,8 +1,17 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
 
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
+
+        events:[
+            {
+              title: "Titulo",
+              start: "2022-04-11"
+            }
+          ],
+
         editable: true,
         initialView: 'dayGridMonth',
         headerToolbar: {
@@ -10,36 +19,28 @@ document.addEventListener('DOMContentLoaded', function () {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
         },
+
         dateClick: function (info) {
             if (info.date < new Date()) {
                 alert("La fecha ya pasó")
             } else {
+
+                clickedDate = new Date((info.date))
+                clickedDate.setDate(clickedDate.getDate() + 1)
+                document.getElementById("startDate").value = clickedDate.toISOString().split('T')[0]
+
                 $('#myModal').modal('show');
-                
-                // $('#myModal').on('hidden.bs.modal', function(){
-                //     var titulo = $('#myModal-title').val();
-                //     var endDate = $('#myModal').data('endDate');
-                //     var startTime = $('#myModal').data('startTime');
-                //     var endTime = $('#myModal').data('endTime');
-                //     alert(titulo)
-                //     evento = createEvent(titulo,endDate, startTime,endTime, info.date)
-
-                //     calendar.addEvent(evento);
-                // });
-                
-
             }
-
-
-            
-
         },
 
         eventClick: function (info) {
             evento = calendar.getEventById(info.event.id);
-            evento.remove();
-        }
 
+            if (confirm("Eliminar evento") == true) {
+                evento.remove();
+            }
+
+        }
     }
     );
     calendar.setOption('locale', 'ISO');
@@ -47,9 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-document.getElementById("endDate").setAttribute("min", new Date()); 
-
-function createEvent(title,endDate,startTime,endTime, date) {
+function createEvent(title, endDate, startTime, endTime, date) {
     const event = {
         id: CreateUUID(), // You must use a custom id generator
         title: title,

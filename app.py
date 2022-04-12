@@ -101,13 +101,7 @@ def modal():
 def calendario():
     
     if request.method == 'POST':
-        app.logger.debug("Title: " + str(request.form.get('title')))
-        app.logger.debug("StartDate: " + str(request.form.get('startDate')))
-        app.logger.debug("EndDate: " + str(request.form.get('endDate')))
-        app.logger.debug("StartTime: " + str(request.form.get('startTime')))
-        app.logger.debug("EndTime: " + str(request.form.get('endTime')))
-        app.logger.debug("Boton: " + str(request.form.get('btn')))
-
+        #Añadir evento
         if request.form.get('btn') == "add":
             title = request.form.get('title')
             start = str(request.form.get('startDate')) + " " + str(request.form.get('startTime'))
@@ -115,6 +109,18 @@ def calendario():
             new_event = EventModel(title=title, start=start, end=end)
             db.session.add(new_event)
             db.session.commit()
+        #Eliminar evento
+        elif request.form.get('btn') == "delete":
+            id = request.form.get('changeID')
+            evento = EventModel.query.filter_by(id = id).first()
+            app.logger.debug(evento.title)
+            db.session.delete(evento)
+            db.session.commit()
+        #Actualizar evento
+        elif request.form.get('btn') == "update":
+            id = request.form.get('changeID')
+            
+
         return render_template('calendario.html')
 
 

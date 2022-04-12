@@ -18,7 +18,7 @@
       if ( window.history.replaceState ) {
         window.history.replaceState( null, null, window.location.href );
       }
-      </script>
+    </script>
 
 
 
@@ -44,19 +44,24 @@
           </div>
           <div class="modal-body">
             <!-- Inicio del formulario -->
-            <form method="post" id = "modalform" >
+            <form method="post" id = "modalform" onSubmit="confirmar()">
               <div class="md-form md-outline input-with-post-icon">
+
                 <input placeholder="Título del evento" type="text" name="title"
                   id="title" class="form-control" required>
                 <label for="title">Título</label>
+
                 <input type="hidden" name = "startDate" id = "startDate"></a>
-                <input placeholder="Día de fin" type="date" min= 
+
+                <input placeholder="Día de fin" type="date"
                   id="endDate"
-                  name="endDate" min="" class="form-control" required>
+                  name="endDate" class="form-control" required>
                 <label for="endDate">Día de fin</label>
+
                 <input placeholder="Select start" type="time" id="startTime"
                   name="startTime" class="form-control" required>
                 <label for="startTime">Hora de inicio</label>
+
                 <input placeholder="Select end" type="time" id="endTime"
                   name="endTime"
                   class="form-control" required>
@@ -92,14 +97,15 @@
             <!-- Inicio del formulario -->
             <form method="post" id = "modalform" >
               <div class="md-form md-outline input-with-post-icon">
+                <input type="hidden" name = "changeID" id = "changeID" value = "">
 
                 <input placeholder="Título del evento" type="text" name="changeTitle"
                   id="changeTitle" class="form-control" required>
                 <label for="changeTitle">Título</label>
 
-                <input placeholder="Día de fin" type="date" min= 
+                <input placeholder="Día de fin" type="date" min= ""
                   id="changeEndDate"
-                  name="changeEndDate" min="" class="form-control" value="" required>
+                  name="changeEndDate" min="" class="form-control" value= required>
                 <label for="changeEndDate">Día de fin</label>
 
                 <input placeholder="Select start" type="time" id="changeStartTime"
@@ -115,8 +121,8 @@
             </div>
             <div class="modal-footer">
 
-              <button id = "btn" name = "btnActualizar" onclick="" class="btn btn-warning">Actualizar datos</button>
-              <button id = "btn" name = "btnEliminar" onclick="" value="" class="btn btn-danger">Eliminar evento</button>
+              <button id = "btn" name = "btn" value = "update" class="btn btn-warning">Actualizar datos</button>
+              <button id = "btn" name = "btn" value = "delete" class="btn btn-danger">Eliminar evento</button>
               <button type="button" class="btn btn-secondary"
                 data-dismiss="modal">Close</button>
             </div>
@@ -126,6 +132,9 @@
       </div>
     </div>
     <!-- Fin del modal -->
+
+
+    
 
 
   </body>

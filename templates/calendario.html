@@ -44,7 +44,7 @@
           </div>
           <div class="modal-body">
             <!-- Inicio del formulario -->
-            <form method="post" id = "modalform" onSubmit="confirmar()">
+            <form method="post" id = "modalform" onSubmit="return confirm('Añadir evento')">
               <div class="md-form md-outline input-with-post-icon">
 
                 <input placeholder="Título del evento" type="text" name="title"
@@ -59,7 +59,7 @@
                 <label for="endDate">Día de fin</label>
 
                 <input placeholder="Select start" type="time" id="startTime"
-                  name="startTime" class="form-control" required>
+                  name="startTime" class="form-control" required onchange="updateMin(this.value)">
                 <label for="startTime">Hora de inicio</label>
 
                 <input placeholder="Select end" type="time" id="endTime"
@@ -95,9 +95,10 @@
           </div>
           <div class="modal-body">
             <!-- Inicio del formulario -->
-            <form method="post" id = "modalform" >
+            <form method="post" id = "modalform" onSubmit="return confirm('¿Confirmar cambios?')">
               <div class="md-form md-outline input-with-post-icon">
                 <input type="hidden" name = "changeID" id = "changeID" value = "">
+                <input type="hidden" name = "changeStartDate" id = "changeStartDate" value = "">
 
                 <input placeholder="Título del evento" type="text" name="changeTitle"
                   id="changeTitle" class="form-control" required>

@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>Chat Room</title>
+
+{%include 'imports.html'%}
+{% block content %}
+{%endblock%}
+
+<link href="static/css/chat.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="https://cdn.socket.io/4.4.1/socket.io.esm.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+
+
+    <div class="page-content page-container" id="page-content">
+        <div class="padding">
+            <div class="row container d-flex justify-content-center">
+                <div class="col-md-4">
+                    <div class="box box-warning direct-chat direct-chat-warning">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Chat Messages</h3>
+                            <div class="box-tools pull-right"> <span data-toggle="tooltip" title="" class="badge bg-yellow" data-original-title="3 New Messages">20</span> <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i> </button> <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle" data-original-title="Contacts"> <i class="fa fa-comments"></i></button> <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i> </button> </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="direct-chat-messages">
+                                <div class="direct-chat-msg">
+                                    <div class="direct-chat-info clearfix"> <span class="direct-chat-name pull-left">Timona Siera</span> <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span> </div> <img class="direct-chat-img" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="message user image">
+                                    <div class="direct-chat-text"> For what reason would it be advisable for me to think about business content? </div>
+                                </div>
+                                <div class="direct-chat-msg right">
+                                    <div class="direct-chat-info clearfix"> <span class="direct-chat-name pull-right">Sarah Bullock</span> <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span> </div> <img class="direct-chat-img" src="https://img.icons8.com/office/36/000000/person-female.png" alt="message user image">
+                                    <div class="direct-chat-text"> Thank you for your believe in our supports </div>
+                                </div>
+                                <div class="direct-chat-msg">
+                                    <div class="direct-chat-info clearfix"> <span class="direct-chat-name pull-left">Timona Siera</span> <span class="direct-chat-timestamp pull-right">23 Jan 5:37 pm</span> </div> <img class="direct-chat-img" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="message user image">
+                                    <div class="direct-chat-text"> For what reason would it be advisable for me to think about business content? </div>
+                                </div>
+                                <div class="direct-chat-msg right">
+                                    <div class="direct-chat-info clearfix"> <span class="direct-chat-name pull-right">Sarah Bullock</span> <span class="direct-chat-timestamp pull-left">23 Jan 6:10 pm</span> </div> <img class="direct-chat-img" src="https://img.icons8.com/office/36/000000/person-female.png" alt="message user image">
+                                    <div class="direct-chat-text"> I would love to. </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <form action="#" method="post">
+                                <div class="input-group"> <input type="text" name="message" placeholder="Type Message ..." class="form-control"> <span class="input-group-btn"> <button type="button" class="btn btn-warning btn-flat">Send</button> </span> </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    <!-- <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
+    <div class="message_holder"></div> -->
+
+    <!-- <form action="" method="POST">
+        <input type="hidden" class="username" value = "{{current_user.name}}"/>
+        <input type="text" class="message" placeholder="Messages"/>
+        <input type="submit"/>
+    </form> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+  
+        socket.on( 'connect', function() {
+          socket.emit( 'my event', {
+            data: 'User Connected'
+          } )
+          var form = $( 'form' ).on( 'submit', function( e ) {
+            e.preventDefault()
+            let user_name = $( 'input.username' ).val()
+            let user_input = $( 'input.message' ).val()
+            socket.emit( 'my event', {
+              user_name : user_name,
+              message : user_input
+            } )
+            $( 'input.message' ).val( '' ).focus()
+          } )
+        } )
+        socket.on( 'my response', function( msg ) {
+          console.log( msg )
+          if( typeof msg.user_name !== 'undefined' ) {
+            $( 'h3' ).remove()
+            $( 'div.message_holder' ).append( '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' )
+          }
+        })
+      </script>
+</body>
+</html>

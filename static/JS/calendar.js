@@ -56,4 +56,3 @@ document.addEventListener('DOMContentLoaded', function () {
     calendar.addEventSource("/eventos");
     calendar.render();
 });
-

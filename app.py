@@ -98,6 +98,8 @@ def saludo():
 def calendario():
 
     if request.method == 'POST':
+        app.logger.debug("Entra al método POST")
+        
         # Añadir evento
         if request.form.get('btn') == "add":
             title = request.form.get('title')
@@ -115,7 +117,7 @@ def calendario():
 
 
         # Eliminar evento
-        elif request.form.get('btn') == "delete":
+        elif request.form.get('btn') == "delete":            
             id = request.form.get('changeID')
             evento = EventModel.query.filter_by(id=id).first()
             app.logger.debug(evento.title)

@@ -1,6 +1,7 @@
+
+
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
-
     var calendar = new FullCalendar.Calendar(calendarEl, {
         /*---INICIO DE REGION DE CONFIGURACION---*/
         displayEventTime: true,
@@ -20,7 +21,11 @@ document.addEventListener('DOMContentLoaded', function () {
         //Añadir evento al clickar una fecha
         dateClick: function (info) {
             if (info.date < new Date().setHours(0, 0, 0, 0)) {
-                alert("La fecha ya pasó")
+                Swal.fire({
+                    title: '¡Error!',
+                    text: 'La fecha seleccionada ya pasó',
+                    icon: 'error'
+                  })
             } else {
                 clickedDate = new Date((info.date))
                 clickedDate.setDate(clickedDate.getDate() + 1)
@@ -47,7 +52,11 @@ document.addEventListener('DOMContentLoaded', function () {
         eventDrop: function (info) {
             evento = calendar.getEventById(info.event.id);
             if (evento.start < new Date().setHours(0, 0, 0, 0)) {
-                alert("La fecha de inicio es anterior que la de hoy")
+                Swal.fire({
+                    title: '¡Error!',
+                    text: 'La fecha de inicio es menor a la actual',
+                    icon: 'error'
+                  })
                 info.revert()
             } else {
                 update(info)

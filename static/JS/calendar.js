@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         /*---INICIO DE REGION DE CONFIGURACION---*/
+        firstDay: 1,
         displayEventTime: true,
         editable: true,
         displayEventEnd: true,

@@ -219,15 +219,17 @@ def event_loader(user_name):
     events = db.session.query(EventModel).filter(
         EventModel.id.match(user_name)).all()
     for evento in events:
-        eventos.append(
-            {
-                "id": evento.id,
-                "title": evento.title,
-                "start": evento.start.isoformat(),
-                "end": evento.end.isoformat(),
-                "backgroundColor": evento.backgroundColor
-            }
-        )
+
+        if not (evento.end < datetime.now()):
+            eventos.append(            
+                {
+                    "id": evento.id,
+                    "title": evento.title,
+                    "start": evento.start.isoformat(),
+                    "end": evento.end.isoformat(),
+                    "backgroundColor": evento.backgroundColor
+                }
+            )
 
     return jsonify(eventos)
 

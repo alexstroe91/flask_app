@@ -220,7 +220,7 @@ def event_loader(user_name):
         EventModel.id.match(user_name)).all()
     for evento in events:
 
-        if not (evento.end < datetime.now()):
+        if not (evento.end.date() < datetime.now().date()):
             eventos.append(            
                 {
                     "id": evento.id,

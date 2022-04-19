@@ -1,6 +1,8 @@
 body {
-	margin: 0;
-	padding: 100;
+	padding-bottom: 125;
+	padding-top: 75;
+	padding-left: 100;
+	padding-right: 100;
 	background-color: #1d2f43;
 	color: #010b13;
 }

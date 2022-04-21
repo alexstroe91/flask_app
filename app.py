@@ -5,13 +5,14 @@ from flask_socketio import *
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
-from datetime import datetime
+from datetime import *
+from time import *
 #Fin Imports
 app = Flask(__name__)
 setup(app)
 migrate = Migrate(app, db)
 db.init_app(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app, manage_session=False)
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
@@ -149,10 +150,50 @@ def calendario():
     return render_template('calendario.html')
 
 #Chat
-
-@app.route('/chat')
+@app.route("/chat", methods=['GET', 'POST'])
 def chat():
-    return render_template('chat.html')
+    ROOMS = ["lounge", "news", "games", "coding", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"]
+
+    if not current_user.is_authenticated:
+        flash('Please login', 'danger')
+        return redirect(url_for('login'))
+    return render_template("chat.html", username=current_user.name, rooms=ROOMS)
+
+
+
+@socketio.on('incoming-msg')
+def on_message(data):
+    """Broadcast messages"""
+
+    msg = data["msg"]
+    username = data["username"]
+    room = data["room"]
+    # Set timestamp
+    time_stamp = datetime.strftime(datetime.now(),'%b-%d %I:%M%p')
+    send({"username": username, "msg": msg, "time_stamp": time_stamp}, room=room)
+
+
+@socketio.on('join')
+def on_join(data):
+    """User joins a room"""
+
+    username = data["username"]
+    room = data["room"]
+    join_room(room)
+
+    # Broadcast that new user has joined
+    send({"msg": username.capitalize() + " ha entrado en la sala " + room }, room=room)
+
+
+@socketio.on('leave')
+def on_leave(data):
+    """User leaves a room"""
+
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    send({"msg": username.capitalize() + " ha abandonado la sala"}, room=room)
+
 #Fin chat
 
 

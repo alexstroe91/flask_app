@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('selector').value = localStorage.getItem('temaSeleccionado')
-    theme.href = "static/css/temas/"+ localStorage.getItem('temaSeleccionado') +".css"
+
+    valorGuardado = localStorage.getItem('temaSeleccionado')
+
+    if (valorGuardado === null){
+        valorGuardado = "original"
+    }
+
+    document.getElementById('selector').value = valorGuardado
+    theme.href = "static/css/temas/"+ valorGuardado +".css"
     
     $('#selector').change(function(){
         var tema = document.getElementById('theme')

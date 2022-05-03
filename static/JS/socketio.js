@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     div.setAttribute("class", "my-msg");
 
                     // Username
-                    span_username.setAttribute("class", "my-username");
-                    span_username.innerText = data.username;
+                    /* span_username.setAttribute("class", "my-username");
+                    span_username.innerText = data.username; */
 
                     // Timestamp
                     span_timestamp.setAttribute("class", "timestamp");
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // HTML to append
                     p.innerHTML += span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_timestamp.outerHTML
-                    div.innerHTML += span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_timestamp.outerHTML
+                    div.innerHTML += span_username.outerHTML +  data.msg + br.outerHTML + span_timestamp.outerHTML
 
                     //Append
                     document.querySelector('#display-message-section').append(div);
